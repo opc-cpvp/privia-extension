@@ -15,14 +15,5 @@ stages:
             inputs:
               secureFile: privia-extension.pem
 
-          - task: qetza.replacetokens.replacetokens-task.replacetokens@5
-            displayName: "Replace Tokens in Extension Configurations"
-            inputs:
-              targetFiles: |
-                manifest.json
-              actionOnMissing: "continue"
-              keepToken: true
-              enableTelemetry: false
-
           - script: '"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --pack-extension=$(Build.SourcesDirectory) --pack-extension-key=$(ExtensionKey.secureFilePath)'
             displayName: "Chrome - Package Extension"
