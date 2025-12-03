@@ -10,7 +10,7 @@ stages:
           vmImage: "windows-latest"
         steps:
           - checkout: self
-            path: privia-extension
+            path: s\privia-extension
 
           - task: DownloadSecureFile@1
             name: "ExtensionKey"
@@ -18,7 +18,7 @@ stages:
             inputs:
               secureFile: privia-extension.pem
 
-          - script: '"%ProgramFiles%\\Google\\Chrome\\Application\\chrome.exe" --pack-extension=$(Build.SourcesDirectory)\privia-extension --pack-extension-key=$(ExtensionKey.secureFilePath)'
+          - script: '"%ProgramFiles%\\Google\\Chrome\\Application\\chrome.exe" --pack-extension=$(Build.SourcesDirectory) --pack-extension-key=$(ExtensionKey.secureFilePath)'
             displayName: "Chrome - Package Extension"
 
           - task: CopyFiles@2
