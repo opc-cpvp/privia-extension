@@ -19,10 +19,10 @@ stages:
             displayName: "Replace Tokens in Extension Configurations"
             inputs:
               targetFiles: |
-                **/manifest.json
+                manifest.json
               actionOnMissing: "continue"
               keepToken: true
               enableTelemetry: false
 
-          - script: "chrome.exe --pack-extension=$(Build.SourcesDirectory) --pack-extension-key=$(ExtensionKey.secureFilePath)"
+          - script: '"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --pack-extension=$(Build.SourcesDirectory) --pack-extension-key=$(ExtensionKey.secureFilePath)'
             displayName: "Chrome - Package Extension"
