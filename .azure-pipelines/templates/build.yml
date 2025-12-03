@@ -44,6 +44,7 @@ stages:
                 $(ExtensionName).crx
                 $(ExtensionName)\updates.xml
               TargetFolder: "$(Build.ArtifactStagingDirectory)"
+              flattenFolders: true
 
           # Publish the artifacts
           - task: PublishBuildArtifacts@1
