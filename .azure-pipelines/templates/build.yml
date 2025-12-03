@@ -11,7 +11,7 @@ stages:
         steps:
           # Since the name of the CRX is based on the parent folder, we need to checkout to a specific path to control it
           - checkout: self
-            path: s\$(ExtensionName)
+            path: s\$(EXTENSION_NAME)
 
           # Download the signing key from secure files
           - task: DownloadSecureFile@1
@@ -41,8 +41,8 @@ stages:
             inputs:
               SourceFolder: "$(Pipeline.Workspace)\\s"
               Contents: |
-                $(ExtensionName).crx
-                $(ExtensionName)\updates.xml
+                $(EXTENSION_NAME).crx
+                $(EXTENSION_NAME)\updates.xml
               TargetFolder: "$(Build.ArtifactStagingDirectory)"
               flattenFolders: true
 

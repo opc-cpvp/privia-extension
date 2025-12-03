@@ -13,3 +13,12 @@ name: "1.$(Date:yyyyMMdd).$(Rev:r)"
 stages:
   # Build all components and publish artifacts
   - template: templates/build.yml
+  # Deploy all components to the specified environment
+  - template: templates/deploy.yml
+    parameters:
+      environmentName: "Stage"
+      environmentVariableGroup: "privia-extension-stage"
+  - template: templates/deploy.yml
+    parameters:
+      environmentName: "Production"
+      environmentVariableGroup: "privia-extension-production"

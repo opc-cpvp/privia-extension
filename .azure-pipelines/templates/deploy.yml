@@ -1,0 +1,40 @@
+# Parameters
+parameters:
+  - name: environmentName # Name of the deployment environment (e.g., Stage, Production)
+    type: string
+  - name: environmentVariableGroup # Name of the Azure DevOps variable group for environment-specific variables
+    type: string
+
+# Stages for deployment
+stages:
+  - stage: "Deploy_${{ parameters.environmentName }}"
+    displayName: "Deploy Stage: ${{ parameters.environmentName }}"
+    variables:
+      - group: privia-extension-release # Common release variables
+      - group: ${{ parameters.environmentVariableGroup }} # Environment-specific variables
+    jobs:
+      - deployment: "Deploy"
+        environment: "Privia Extension - ${{ parameters.environmentName }}"
+        pool:
+          name: Default # Use the default agent pool
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                # Replace tokens in the updates.xml file with pipeline variables
+                - task: qetza.replacetokens.replacetokens-task.replacetokens@6
+                  displayName: "Replace Tokens"
+                  inputs:
+                    sources: "$(Pipeline.Workspace)/privia-extension/updates.xml"
+                    missingVarLog: error
+                    telemetryOptout: true
+
+                # Copy Privia Extension files to the CRX server
+                - task: WindowsMachineFileCopy@2
+                  displayName: "Deploy Extension Files to CRX Server"
+                  inputs:
+                    SourcePath: "$(Pipeline.Workspace)/privia-extension"
+                    MachineNames: "$(MACHINE_NAME)"
+                    AdminUserName: "$(ADMIN_LOGIN)"
+                    AdminPassword: "$(PASSWORD)"
+                    TargetPath: "E:\\$(WEBSITE_NAME)\\$(EXTENSION_NAME)"
