@@ -1,0 +1,28 @@
+# Stages for deployment
+stages:
+  - stage: "Build"
+    displayName: "Build Stage"
+    variables:
+      - group: privia-extension-release # Common release variables
+    jobs:
+      - job: "Build"
+        pool:
+          vmImage: "windows-latest"
+        steps:
+          - task: DownloadSecureFile@1
+            name: "ExtensionKey"
+            displayName: "Download - Signing Key"
+            inputs:
+              secureFile: privia-extension.pem
+
+          - task: qetza.replacetokens.replacetokens-task.replacetokens@5
+            displayName: "Replace Tokens in Extension Configurations"
+            inputs:
+              targetFiles: |
+                **/manifest.json
+              actionOnMissing: "continue"
+              keepToken: true
+              enableTelemetry: false
+
+          - script: "chrome.exe --pack-extension=$(Build.SourcesDirectory) --pack-extension-key=$(ExtensionKey.secureFilePath)"
+            displayName: "Chrome - Package Extension"

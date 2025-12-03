@@ -1,0 +1,13 @@
+# Trigger pipeline on master commit
+trigger:
+  branches:
+    include:
+      - main
+
+# Disable PR triggers
+pr: none
+
+# Pipeline stages
+stages:
+  # Build all components and publish artifacts
+  - template: templates/build.yml
