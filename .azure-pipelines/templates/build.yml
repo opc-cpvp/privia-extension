@@ -42,6 +42,7 @@ stages:
               SourceFolder: "$(Pipeline.Workspace)\\s"
               Contents: |
                 $(ExtensionName).crx
+                $(ExtensionName)\updates.xml
               TargetFolder: "$(Build.ArtifactStagingDirectory)"
 
           # Publish the artifacts
