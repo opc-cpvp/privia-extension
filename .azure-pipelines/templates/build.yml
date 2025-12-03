@@ -10,7 +10,7 @@ stages:
           vmImage: "windows-latest"
         steps:
           - checkout: self
-            path: $(Build.SourcesDirectory)\privia-extension
+            path: privia-extension
 
           - task: DownloadSecureFile@1
             name: "ExtensionKey"
