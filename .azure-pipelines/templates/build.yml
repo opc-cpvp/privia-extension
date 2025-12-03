@@ -9,26 +9,42 @@ stages:
         pool:
           vmImage: "windows-latest"
         steps:
+          # Since the name of the CRX is based on the parent folder, we need to checkout to a specific path to control it
           - checkout: self
-            path: s\privia-extension
+            path: s\$(ExtensionName)
 
+          # Download the signing key from secure files
           - task: DownloadSecureFile@1
             name: "ExtensionKey"
             displayName: "Download - Signing Key"
             inputs:
               secureFile: privia-extension.pem
 
+          - task: qetza.replacetokens.replacetokens-task.replacetokens@5
+            displayName: "Replace Tokens in Extension Configurations"
+            inputs:
+              rootDirectory: "$(Build.SourcesDirectory)"
+              targetFiles: |
+                updates.xml
+                manifest.json
+              actionOnMissing: "continue"
+              keepToken: true
+              enableTelemetry: false
+
+          # Package the Chrome extension
           - script: '"%ProgramFiles%\\Google\\Chrome\\Application\\chrome.exe" --pack-extension=$(Build.SourcesDirectory) --pack-extension-key=$(ExtensionKey.secureFilePath)'
             displayName: "Chrome - Package Extension"
 
+          # Copy the CRX to the artifact staging directory
           - task: CopyFiles@2
             displayName: "Copy Extension Files to: $(Build.ArtifactStagingDirectory)"
             inputs:
               SourceFolder: "$(Pipeline.Workspace)\\s"
               Contents: |
-                *.crx
+                $(ExtensionName).crx
               TargetFolder: "$(Build.ArtifactStagingDirectory)"
 
+          # Publish the artifacts
           - task: PublishBuildArtifacts@1
             displayName: "Publish Artifacts"
             inputs:

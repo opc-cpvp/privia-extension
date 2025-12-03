@@ -7,6 +7,8 @@ trigger:
 # Disable PR triggers
 pr: none
 
+name: "1.$(Date:yyyyMMdd).$(Rev:r)"
+
 # Pipeline stages
 stages:
   # Build all components and publish artifacts
