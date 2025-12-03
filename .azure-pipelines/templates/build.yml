@@ -24,7 +24,7 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy Extension Files to: $(Build.ArtifactStagingDirectory)"
             inputs:
-              SourceFolder: "$(Pipeline.Workspace)"
+              SourceFolder: "$(Pipeline.Workspace)\\s"
               Contents: |
                 *.crx
               TargetFolder: "$(Build.ArtifactStagingDirectory)"
