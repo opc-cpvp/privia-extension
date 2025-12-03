@@ -17,3 +17,17 @@ stages:
 
           - script: '"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --pack-extension=$(Build.SourcesDirectory) --pack-extension-key=$(ExtensionKey.secureFilePath)'
             displayName: "Chrome - Package Extension"
+
+          - task: CopyFiles@2
+            displayName: "Copy Extension Files to: $(Build.ArtifactStagingDirectory)"
+            inputs:
+              SourceFolder: "$(Pipeline.Workspace)"
+              Contents: |
+                *.crx
+              TargetFolder: "$(Build.ArtifactStagingDirectory)"
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifacts"
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: "privia-extension"
