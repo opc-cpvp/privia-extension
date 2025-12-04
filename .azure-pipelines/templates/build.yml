@@ -26,8 +26,8 @@ stages:
           - task: FileTransform@2
             inputs:
               folderPath: "$(Build.SourcesDirectory)"
-              fileType: "json"
-              targetFiles: "manifest.json"
+              jsonTargetFiles: |
+                manifest.json
 
           # Package the Chrome extension
           - script: '"%ProgramFiles%\\Google\\Chrome\\Application\\chrome.exe" --pack-extension=$(Build.SourcesDirectory) --pack-extension-key=$(ExtensionKey.secureFilePath)'
