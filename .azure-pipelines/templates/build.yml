@@ -27,6 +27,7 @@ stages:
             displayName: "Transform - manifest.json"
             inputs:
               folderPath: "$(Build.SourcesDirectory)"
+              enableXmlTransform: false
               jsonTargetFiles: |
                 manifest.json
 
