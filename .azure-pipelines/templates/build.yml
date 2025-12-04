@@ -24,6 +24,7 @@ stages:
 
           # Apply transformations in manifest.json
           - task: FileTransform@2
+            displayName: "Transform - manifest.json"
             inputs:
               folderPath: "$(Build.SourcesDirectory)"
               jsonTargetFiles: |
