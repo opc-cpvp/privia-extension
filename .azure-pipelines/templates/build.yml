@@ -4,6 +4,8 @@ stages:
     displayName: "Build Stage"
     variables:
       - group: privia-extension-release # Common release variables
+      - name: version
+        value: "$(Build.BuildNumber)"
     jobs:
       - job: "Build"
         pool:
@@ -20,16 +22,12 @@ stages:
             inputs:
               secureFile: privia-extension.pem
 
-          - task: qetza.replacetokens.replacetokens-task.replacetokens@5
-            displayName: "Replace Tokens in Extension Configurations"
+          # Apply transformations in manifest.json
+          - task: FileTransform@1
             inputs:
-              rootDirectory: "$(Build.SourcesDirectory)"
-              targetFiles: |
-                updates.xml
-                manifest.json
-              actionOnMissing: "continue"
-              keepToken: true
-              enableTelemetry: false
+              folderPath: "$(Build.SourcesDirectory)"
+              fileType: "json"
+              targetFiles: "manifest.json"
 
           # Package the Chrome extension
           - script: '"%ProgramFiles%\\Google\\Chrome\\Application\\chrome.exe" --pack-extension=$(Build.SourcesDirectory) --pack-extension-key=$(ExtensionKey.secureFilePath)'
